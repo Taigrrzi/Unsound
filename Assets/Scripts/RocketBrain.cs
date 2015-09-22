@@ -5,28 +5,104 @@ public class RocketBrain : MonoBehaviour {
 
     public bool active;
     public float thrustPower;
-    //public byte rocketDirection; //0 = right, 1 = down, 2 = left, 3 = up
     public float myRotation;
     public float xComponent;
     public float yComponent;
-    public float xDistance;
-    public float yDistance;
-    // Update is called once per frame
+    public float mass;
+    public int maxKeys;
+    public int[] boundKeys ;
+    public bool pressed;
+    public shipComputer shipcomputer;
+    public int usedKeys = 0;
+
     void Start()
     {
-        yDistance = transform.localPosition.y - transform.parent.position.y;
-        xDistance = transform.localPosition.x - transform.parent.position.x;
-        xComponent = -Mathf.Sin(Mathf.Deg2Rad * myRotation);
+        pressed = false;
+        myRotation = transform.rotation.eulerAngles.z;
+        transform.parent.GetComponent<Rigidbody2D>().mass += mass;
+        xComponent = Mathf.Sin(Mathf.Deg2Rad * myRotation);
         yComponent = Mathf.Cos(Mathf.Deg2Rad * myRotation);
+        if (boundKeys.Length == 0)
+        {
+            boundKeys = new int[maxKeys];
+            for (int i = 0; i < maxKeys; i++)
+            {
+                boundKeys[i] = -1;
+            }
+        }
+        else
+        {
+            int[] tempArray = boundKeys;
+            usedKeys = tempArray.Length;
+            boundKeys = new int[maxKeys];
+            for (int i = 0; i < maxKeys; i++)
+            {
+                if (i<usedKeys)
+                {
+                    boundKeys[i] = tempArray[i];
+                } else
+                {
+                    boundKeys[i] = -1;
+                }
+            }
+        }
     }
 
-    void Update () {
-        myRotation = transform.parent.rotation.eulerAngles.z;
+    void FixedUpdate() {
+        pressed = false;
+        for (int i = 0; i < usedKeys; i++)
+        {
+            if (shipcomputer.keyBindingStates[boundKeys[i]]) {
+            pressed = true;
+            active = true;
+            }
+        }    
+        
+        if (pressed==false)
+        {
+            active = false;
+        }
         GetComponent<Animator>().SetBool("RocketActive",active);
         if (active)
         {
-            transform.parent.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(thrustPower*xComponent,thrustPower*yComponent),ForceMode2D.Force);
-            transform.parent.GetComponent<Rigidbody2D>().AddTorque(0.1f*((thrustPower*xComponent*yDistance) + (thrustPower * yComponent * xDistance)));
+            transform.parent.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(thrustPower*(-xComponent),thrustPower*yComponent),ForceMode2D.Force);
+            transform.parent.GetComponent<Rigidbody2D>().AddTorque(((thrustPower*xComponent*transform.localPosition.y) + (thrustPower * yComponent * transform.localPosition.x)));
         }
 	}
+    /*
+    void mapNaturalKeys()
+    {
+        if (yComponent == 1)
+        {
+           setNextBoundKey("Forward");
+        } else if (yComponent == -1)
+        {
+            setNextBoundKey("Backward");
+        }
+        if (xComponent == 1)
+        {
+            setNextBoundKey("Left");
+        }
+        else if (xComponent == -1)
+        {
+            setNextBoundKey("Right");
+        }
+        if (thrustPower * xComponent * transform.localPosition.y>0)
+        {
+            setNextBoundKey("turnRight");
+        } else if (thrustPower * xComponent * transform.localPosition.y < 0)
+        {
+            setNextBoundKey("turnLeft");
+        }
+    }
+    */
+    void setNextBoundKey(int Key)
+    {
+        for (int i=0;i<boundKeys.Length;i++)
+        {
+            if (boundKeys[i] == -1) {
+                boundKeys[i] = Key;
+            }
+        }
+    }
 }
