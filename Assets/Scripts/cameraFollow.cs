@@ -10,10 +10,15 @@ public class cameraFollow : MonoBehaviour
     public Vector2 mouseScreenPosition;
     public Vector2 mouseWorldPosition;
     public Vector3 intendedPosition;
+    public bool snapRotation;
     // Use this for initialization
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (snapRotation)
+        {
+            transform.rotation = target.transform.rotation; 
+        }
         intendedZoom -= zoomSpeed * Input.GetAxis("MouseScrollWheel");
         if (intendedZoom < 1)
         {

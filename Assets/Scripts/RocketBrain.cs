@@ -6,9 +6,13 @@ public class RocketBrain : MonoBehaviour {
     public bool active;
     public float thrustPower;
     public float myRotation;
+    public bool forceOn;
+    public bool powered;
     public float xComponent;
     public float yComponent;
     public float mass;
+    public bool panelOut;
+    public string rocketName;
     public int maxKeys;
     public int[] boundKeys ;
     public bool pressed;
@@ -17,6 +21,9 @@ public class RocketBrain : MonoBehaviour {
 
     void Start()
     {
+        panelOut = false;
+        forceOn = false;
+        powered = true;
         pressed = false;
         myRotation = transform.rotation.eulerAngles.z;
         transform.parent.GetComponent<Rigidbody2D>().mass += mass;
@@ -54,7 +61,10 @@ public class RocketBrain : MonoBehaviour {
         {
             if (shipcomputer.keyBindingStates[boundKeys[i]]) {
             pressed = true;
-            active = true;
+                if (powered)
+                {
+                    active = true;
+                }
             }
         }    
         
@@ -62,13 +72,49 @@ public class RocketBrain : MonoBehaviour {
         {
             active = false;
         }
-        GetComponent<Animator>().SetBool("RocketActive",active);
+        if (forceOn)
+        {
+            if (powered)
+            {
+                active = true;
+            }
+        }
+        GetComponent<Animator>().SetBool("RocketActive", active);
         if (active)
         {
             transform.parent.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(thrustPower*(-xComponent),thrustPower*yComponent),ForceMode2D.Force);
             transform.parent.GetComponent<Rigidbody2D>().AddTorque(((thrustPower*xComponent*transform.localPosition.y) + (thrustPower * yComponent * transform.localPosition.x)));
         }
-	}
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            if (GetComponent<Collider2D>().OverlapPoint(mousePosition)&&!panelOut)
+            {
+                //Debug.Log(name + "was Clicked");
+                GameObject panel = Instantiate(Resources.Load<GameObject>("RocketPanel"));
+                panel.GetComponent<RocketPanel>().rocket = gameObject;
+                panelOut = true;
+                panel.transform.position = Camera.main.WorldToScreenPoint(transform.position);
+                panel.transform.SetParent(GameObject.Find("Canvas").transform);
+            }
+
+
+        }
+
+    }
+    /*
+    void OnMouseDown()
+    {
+        // if (Input.GetKeyDown(KeyCode.Mouse0))
+        //{
+        Debug.Log(name+ "was Clicked");
+        GameObject panel = Instantiate(Resources.Load<GameObject>("RocketPanel"));
+        panel.GetComponent<RocketPanel>().rocket = gameObject;
+        panel.transform.position = Camera.main.WorldToScreenPoint(transform.position);
+        panel.transform.SetParent(GameObject.Find("Canvas").transform);
+        //}
+    }
     /*
     void mapNaturalKeys()
     {
