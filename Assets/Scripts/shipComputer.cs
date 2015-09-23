@@ -8,9 +8,13 @@ public class shipComputer : MonoBehaviour {
     public KeyCode[] keyBindingCodes;
     public string[] keyBindingNames;
     public bool[] keyBindingStates;
+    public bool panelOut;
     public int usedKeyBindings;
+    public string computerName;
 
     void Start () {
+        computerName = "ZHI Computer";
+        panelOut = false;
         usedKeyBindings = 0;
         keyBindingNames = new string[maxBindings];
         keyBindingCodes = new KeyCode[maxBindings];
@@ -41,5 +45,21 @@ public class shipComputer : MonoBehaviour {
         {
             keyBindingStates[i] = Input.GetKey(keyBindingCodes[i]);
         }
-	}
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            if (GetComponent<Collider2D>().OverlapPoint(mousePosition) && !panelOut)
+            {
+                //Debug.Log(name + "was Clicked");
+                GameObject panel = Instantiate(Resources.Load<GameObject>("ShipComputerPanel"));
+                panel.GetComponent<shipComputerPanel>().computer = gameObject;
+                panelOut = true;
+                panel.transform.position = Camera.main.WorldToScreenPoint(transform.position);
+                panel.transform.SetParent(GameObject.Find("Canvas").transform);
+            }
+
+
+        }
+    }
 }

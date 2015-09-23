@@ -95,7 +95,7 @@ public class RocketBrain : MonoBehaviour {
                 GameObject panel = Instantiate(Resources.Load<GameObject>("RocketPanel"));
                 panel.GetComponent<RocketPanel>().rocket = gameObject;
                 panelOut = true;
-                panel.transform.position = Camera.main.WorldToScreenPoint(transform.position);
+                panel.transform.position = Camera.main.WorldToScreenPoint(transform.GetChild(0).position);
                 panel.transform.SetParent(GameObject.Find("Canvas").transform);
             }
 
