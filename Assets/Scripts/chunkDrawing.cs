@@ -38,7 +38,7 @@ public class chunkDrawing : MonoBehaviour {
                // Debug.Log(splitted[0].Substring(7));
                 float chunkx = int.Parse(splitted[0].Substring(7));
                 float chunky = int.Parse(splitted[1]);
-                if (Mathf.Sqrt(Mathf.Pow(chunkx - currentChunk.x, 2) + Mathf.Pow(chunky - currentChunk.y, 2)) > 2)
+                if (Mathf.Sqrt(Mathf.Pow(chunkx - currentChunk.x, 2) + Mathf.Pow(chunky - currentChunk.y, 2)) > 1.7)
                 {
                     disableChunk(transform.GetChild(i));
                 }
@@ -64,10 +64,7 @@ public class chunkDrawing : MonoBehaviour {
     {
         if (transform.FindChild("Chunk :" + chunkPos.x + "," + chunkPos.y)!=null) {
             Transform chunkObj = transform.FindChild("Chunk :" + chunkPos.x + "," + chunkPos.y) ;
-            for (int i = 0; i< chunkObj.childCount;i++)
-            {
-                chunkObj.GetChild(i).gameObject.SetActive(false);
-            }
+            chunkObj.gameObject.SetActive(false);
         } else
         {
             Debug.LogError("Trying to disable non-existant chunk!");
@@ -76,31 +73,22 @@ public class chunkDrawing : MonoBehaviour {
 
     void disableChunk(Transform chunkObj)
     {
-            //Transform chunkObj = transform.FindChild("Chunk :" + chunk.position.x + "," + chunk.position.y);
-            for (int i = 0; i < chunkObj.childCount; i++)
-            {
-                chunkObj.GetChild(i).gameObject.SetActive(false);
-            }
+        //Transform chunkObj = transform.FindChild("Chunk :" + chunk.position.x + "," + chunk.position.y);
+        chunkObj.gameObject.SetActive(false);
     }
 
     void enableChunk(Transform chunkObj)
     {
         //Transform chunkObj = transform.FindChild("Chunk :" + chunk.position.x + "," + chunk.position.y);
-        for (int i = 0; i < chunkObj.childCount; i++)
-        {
-            chunkObj.GetChild(i).gameObject.SetActive(true);
-        }
+        chunkObj.gameObject.SetActive(true);
     }
 
     void enableChunk(Coord chunkPos)
     {
-        if (transform.FindChild("Chunk :" + chunkPos.x + "," + chunkPos.y) != null)
+        Transform chunkObj = transform.FindChild("Chunk :" + chunkPos.x + "," + chunkPos.y);
+        if (chunkObj != null)
         {
-            Transform chunkObj = transform.FindChild("Chunk :" + chunkPos.x + "," + chunkPos.y);
-            for (int i = 0; i < chunkObj.childCount; i++)
-            {
-                chunkObj.GetChild(i).gameObject.SetActive(true);
-            }
+            chunkObj.gameObject.SetActive(true);
         }
         else
         {
