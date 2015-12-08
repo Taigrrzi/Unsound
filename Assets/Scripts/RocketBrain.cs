@@ -82,7 +82,8 @@ public class RocketBrain : MonoBehaviour {
         GetComponent<Animator>().SetBool("RocketActive", active);
         if (active)
         {
-            transform.parent.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(thrustPower*(-xComponent),thrustPower*yComponent),ForceMode2D.Force);
+            transform.parent.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(thrustPower * (-xComponent), thrustPower * yComponent), ForceMode2D.Force);
+            //transform.parent.GetComponent<Rigidbody2D>().AddForceAtPosition(new Vector2(thrustPower * (xComponent), thrustPower * yComponent), transform.position);
             transform.parent.GetComponent<Rigidbody2D>().AddTorque(((thrustPower*xComponent*transform.localPosition.y) + (thrustPower * yComponent * transform.localPosition.x)));
         }
         if (Input.GetMouseButtonDown(0))

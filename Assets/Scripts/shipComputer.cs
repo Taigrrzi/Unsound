@@ -11,8 +11,16 @@ public class shipComputer : MonoBehaviour {
     public bool panelOut;
     public int usedKeyBindings;
     public string computerName;
+    public int baseHullArmor;
+    public bool tagging;
+    public int currentHullArmor;
+    public int maxTaggedObjects;
+    public int TaggedObjectsUsed;
+    public GameObject[] taggedObjects;
 
     void Start () {
+        taggedObjects = new GameObject[maxTaggedObjects];
+        currentHullArmor = baseHullArmor;
         computerName = "ZHI Computer";
         panelOut = false;
         usedKeyBindings = 0;
@@ -60,6 +68,38 @@ public class shipComputer : MonoBehaviour {
             }
 
 
+        }
+        for (int i = 0; i<TaggedObjectsUsed;i++)
+        {
+            if (taggedObjects[i]!=null)
+            {
+
+            }else
+            {
+                for (int j = i; j < TaggedObjectsUsed-1; j++)
+                {
+                    taggedObjects[j] = taggedObjects[j + 1];
+                }
+                taggedObjects[maxTaggedObjects] = null;
+            }
+        }
+
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        currentHullArmor -= Mathf.RoundToInt(collision.relativeVelocity.magnitude*10);
+    }
+
+    public void addNewTag(GameObject taggedObj)
+    {
+        if (TaggedObjectsUsed<maxTaggedObjects)
+        {
+            taggedObjects[TaggedObjectsUsed] = taggedObj;
+            TaggedObjectsUsed++;
+        } else
+        {
+            Debug.LogError("Called Object Tag function and computer has no more space!");
         }
     }
 }
