@@ -5,31 +5,37 @@ public class asteroidControl : MonoBehaviour {
 
     public string[] asteroidObjects;
     public float[] asteroidRarities;
-    public int asteroidAmount;
-    public float maxX;
-    public float maxY;
-    public float minX;
-    public GameObject efficientDrawing;
-    public float minY;
-    GameObject asteroidParent;
+    //public int asteroidAmount;
+    //public float maxX;
+    //public float maxY;
+    //public float minX;
+    //public float minY;
+    //GameObject asteroidParent;
 
 
 	// Use this for initialization
 	void Start () {
-        asteroidParent = new GameObject() ;
+
+        //GenerateRandomField(maxX,maxY,minX,minY);
+	
+	}
+
+    public GameObject GenerateRandomField(float mmaxX, float mmaxY, float mminX, float mminY,int amount)
+    {
+        GameObject asteroidParent = new GameObject();
         asteroidParent.name = "Asteroids";
-        asteroidParent.transform.parent = efficientDrawing.transform;
         asteroidParent.tag = "Group";
-        for (int i=0; i< asteroidAmount; i++)
+        for (int i = 0; i < amount; i++)
         {
             GameObject currentAsteroid = Instantiate(Resources.Load<GameObject>(GenerateRandomAsteroid()));
             currentAsteroid.transform.parent = asteroidParent.transform;
-            currentAsteroid.transform.position = new Vector3(Random.Range(maxX, minX), Random.Range(maxY, minY), 0);
+            currentAsteroid.transform.position = new Vector3(Random.Range(mmaxX, mminX), Random.Range(mmaxY, mminY), 0);
             currentAsteroid.GetComponent<Rigidbody2D>().angularVelocity = Random.value * 100;
             currentAsteroid.GetComponent<Rigidbody2D>().velocity = Vector2.right * ((Random.value * 2) - 1);
         }
-	
-	}
+
+        return asteroidParent;
+    }
 
     public string GenerateRandomAsteroid()
     {
