@@ -20,21 +20,16 @@ public class asteroidControl : MonoBehaviour {
 	
 	}
 
-    public GameObject GenerateRandomField(float mmaxX, float mmaxY, float mminX, float mminY,int amount)
+    public void GenerateRandomField(float mmaxX, float mmaxY, float mminX, float mminY,int amount,GameObject par)
     {
-        GameObject asteroidParent = new GameObject();
-        asteroidParent.name = "Asteroids";
-        asteroidParent.tag = "Group";
         for (int i = 0; i < amount; i++)
         {
             GameObject currentAsteroid = Instantiate(Resources.Load<GameObject>(GenerateRandomAsteroid()));
-            currentAsteroid.transform.parent = asteroidParent.transform;
+            currentAsteroid.transform.parent = par.transform;
             currentAsteroid.transform.position = new Vector3(Random.Range(mmaxX, mminX), Random.Range(mmaxY, mminY), 0);
             currentAsteroid.GetComponent<Rigidbody2D>().angularVelocity = Random.value * 100;
             currentAsteroid.GetComponent<Rigidbody2D>().velocity = Vector2.right * ((Random.value * 2) - 1);
         }
-
-        return asteroidParent;
     }
 
     public string GenerateRandomAsteroid()
