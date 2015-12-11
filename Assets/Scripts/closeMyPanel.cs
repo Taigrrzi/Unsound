@@ -17,5 +17,10 @@ public class closeMyPanel : MonoBehaviour {
             transform.GetComponentInParent<StationPanel>().station.GetComponent<spaceStationBrain>().basePanelOut = false;
             Destroy(transform.GetComponentInParent<dragPanel>().gameObject);
         }
+        else if (type == "Console")
+        {
+            transform.GetComponentInParent<Console>().playerShip.GetComponent<shipComputer>().consolePanelOut = false;
+            transform.GetComponentInParent<Console>().Hide();
+        }
     }
 }

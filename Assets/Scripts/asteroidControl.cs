@@ -75,7 +75,7 @@ public class asteroidControl : MonoBehaviour {
                 currentValue += asteroidRarities[i];
             }
         }
-        Debug.Log("Error");
+        Debug.Log("Asteroid Distribution Values Add Up To More Than One!");
         return "Error";
     }
 }

@@ -7,16 +7,19 @@ public class DistanceDrawing : MonoBehaviour {
     public GameObject playerShip;
     public GameObject[] circleArray;
     asteroidControl astControl;
-    public int asteroidAmount;
+    public float asteroidDensity;
+    int asteroidAmount;
 
     // Use this for initialization
     void Start () {
         astControl = GetComponent<asteroidControl>();
+        asteroidAmount = Mathf.FloorToInt(asteroidDensity*Mathf.PI*generateDistance*generateDistance);
         circleArray = GetComponent<asteroidControl>().GenerateRandomCircle(playerShip.transform.position.x, playerShip.transform.position.y,generateDistance,asteroidAmount,gameObject);
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        asteroidAmount = Mathf.FloorToInt(asteroidDensity * Mathf.PI * generateDistance * generateDistance);
         for (int i=0; i<circleArray.Length;i++)
         {
            if  (circleArray[i]==null)

@@ -12,6 +12,7 @@ public class conformToCamera : MonoBehaviour {
 	void Update () {
         Camera mainCam = Camera.main;
         transform.localScale = new Vector3 (mainCam.orthographicSize * (16f / 9f) * 20, mainCam.orthographicSize * 20);
-        transform.position = new Vector3(mainCam.transform.position.x, mainCam.transform.position.y, transform.position.z); 
+        transform.position = new Vector3(mainCam.transform.position.x, mainCam.transform.position.y, transform.position.z);
+        transform.rotation = mainCam.transform.rotation;
 	}
 }

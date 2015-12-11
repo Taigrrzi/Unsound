@@ -11,6 +11,7 @@ public class mineBrain : MonoBehaviour {
     float timer;
     public bool tripped;
     public bool huge;
+    public bool inverse;
 	// Use this for initialization
 
     void Update ()
@@ -43,10 +44,17 @@ public class mineBrain : MonoBehaviour {
             GameObject bang = Instantiate(Resources.Load<GameObject>("HugeExplosion"));
             bang.GetComponent<CircleCollider2D>().radius = explosionSize;
             bang.GetComponent<explosion>().power = explosionPower;
-            bang.GetComponent<explosion>().duration = 3;
+            bang.GetComponent<explosion>().duration = 60;
             bang.transform.position = transform.position;
         }
-        else
+        else if (inverse)
+        {
+            GameObject bang = Instantiate(Resources.Load<GameObject>("Implosion"));
+            bang.GetComponent<CircleCollider2D>().radius = explosionSize;
+            bang.GetComponent<implosion>().power = explosionPower;
+            bang.GetComponent<implosion>().duration = 180;
+            bang.transform.position = transform.position;
+        }
         {
             GameObject bang = Instantiate(Resources.Load<GameObject>("Explosion"));
             bang.GetComponent<CircleCollider2D>().radius = explosionSize;

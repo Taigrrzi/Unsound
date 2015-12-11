@@ -14,15 +14,22 @@ public class shipComputer : MonoBehaviour {
     public int baseHullArmor;
     public bool tagging;
     public int currentHullArmor;
+    public bool consolePanelOut;
     public int maxTaggedObjects;
     public int TaggedObjectsUsed;
     public GameObject[] taggedObjects;
+    public Console console;
 
     void Start () {
+        console.AddFunctionality(new ConsoleFunctionality("ping", gameObject, "Ping:: No Parameters. Sends out a short radio ping.",true));
+        console.AddFunctionality(new ConsoleFunctionality("freeze", gameObject, "Freeze:: No Parameters. Stops ship movement.",true));
+        console.AddFunctionality(new ConsoleFunctionality("noclip", gameObject, "Noclip:: Toggles Ship Colliders",false));
+
         taggedObjects = new GameObject[maxTaggedObjects];
         currentHullArmor = baseHullArmor;
         computerName = "ZHI Computer";
         panelOut = false;
+        consolePanelOut = false;
         usedKeyBindings = 0;
         keyBindingNames = new string[maxBindings];
         keyBindingCodes = new KeyCode[maxBindings];
@@ -45,11 +52,28 @@ public class shipComputer : MonoBehaviour {
         {
             attachedComponents[i] = transform.GetChild(i).gameObject;
         }
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	    for (int i=0;i<usedKeyBindings;i++)
+        if (Input.GetKeyDown(KeyCode.BackQuote))
+        {
+            if (consolePanelOut)
+            {
+                consolePanelOut = false;
+                console.Hide();
+            } else
+            {
+                consolePanelOut = true;
+                console.Show();
+            }
+        }
+        if (GetComponent<ConsoleReciever>().incomingFunction)
+        {
+            HandleFunction();
+        }
+        for (int i=0;i<usedKeyBindings;i++)
         {
             keyBindingStates[i] = Input.GetKey(keyBindingCodes[i]);
         }
@@ -102,4 +126,46 @@ public class shipComputer : MonoBehaviour {
             Debug.LogError("Called Object Tag function and computer has no more space!");
         }
     }
+
+    public void HandleFunction()
+    {
+        string[] consoleInput = GetComponent<ConsoleReciever>().consoleInput;
+        string funcString = GetComponent<ConsoleReciever>().functionName;
+        switch (funcString)
+        {
+            case "ping":
+                Ping();
+                break;
+            case "noclip":
+                ToggleCollision();
+                console.LogToConsole("Ship Collision Toggled");
+                break;
+            case "freeze":
+                GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                GetComponent<Rigidbody2D>().angularVelocity = 0;
+                console.LogToConsole("Ship Stopped");
+                break;
+            default:
+                Debug.LogError("HandleFunction called with invalid function name!");
+                break;
+        }
+        GetComponent<ConsoleReciever>().incomingFunction = false;
+    }
+
+    public void Ping()
+    {
+        GameObject pingObj = Instantiate(Resources.Load<GameObject>("Ping"));
+        pingObj.transform.position = transform.position;
+        console.LogToConsole("Radio Ping Launched");
+        //pingObj.GetComponent<pingBrain>().followobject = gameObject;
+    }
+
+    public void ToggleCollision()
+    {
+        foreach (Collider2D col in GetComponentsInChildren<Collider2D>())
+        {
+            col.enabled = !(col.enabled);
+        }
+    }
+
 }
