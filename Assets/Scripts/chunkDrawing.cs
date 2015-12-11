@@ -2,101 +2,164 @@
 using System.Collections;
 
 public class chunkDrawing : MonoBehaviour {
-    public int gridSize= 100;
+    /*public int gridSize= 100;
     public int chunkSize = 50;
-    public bool[,] chunksDrawn = new bool[0,0];
+    public GameObject[,] chunkArray = new GameObject[0, 0];
+    public bool[,] chunksEnabledArray = new bool[0, 0];
     public Coord currentChunk;
     public GameObject playerShip;
 
     // Use this for initialization
     void Start () {
-        chunksDrawn = new bool[gridSize, gridSize];
+        chunkArray = new GameObject[gridSize, gridSize];
+        chunksEnabledArray = new bool[gridSize, gridSize];
+
         for (int i=0; i< gridSize;i++)
         {
             for (int j=0; j< gridSize; j++)
             {
-                chunksDrawn[i, j] = false;
+                chunkArray[i, j] = null;
+                chunksEnabledArray[i, j] = false;
             }
         }
-        currentChunk.x = Mathf.FloorToInt(playerShip.transform.position.x / chunkSize) + (gridSize / 2);
-        currentChunk.y = Mathf.FloorToInt(playerShip.transform.position.y / chunkSize) + (gridSize / 2);
-        GenerateChunksNine(currentChunk);
+        GenerateChunksNine(toChunkValue(playerShip.transform.position.x), toChunkValue(playerShip.transform.position.y));
 
     }
-	
-	// Update is called once per frame
-	void Update () {
-        currentChunk.x = Mathf.FloorToInt(playerShip.transform.position.x/ chunkSize) + (gridSize/2);
-        currentChunk.y = Mathf.FloorToInt(playerShip.transform.position.y/ chunkSize) + (gridSize/2);
-        GenerateMissingNearby(currentChunk);
 
-        for (int i=0; i<transform.childCount;i++)
+    // Update is called once per frame
+    void Update()
+    {
+        GenerateMissingNearby(playerShip);
+
+        int playerX = toChunkValue(playerShip.transform.position.x);
+        int playerY = toChunkValue(playerShip.transform.position.y);
+
+        for (int i = 0; i < gridSize; i++)
         {
-            if (transform.GetChild(i).tag == "Group")
+            for (int j = 0; j < gridSize; j++)
             {
-                string[] splitted = transform.GetChild(i).name.Split(',');
-               // Debug.Log(splitted[0].Substring(7));
-                float chunkx = int.Parse(splitted[0].Substring(7));
-                float chunky = int.Parse(splitted[1]);
-                if (Mathf.Sqrt(Mathf.Pow(chunkx - currentChunk.x, 2) + Mathf.Pow(chunky - currentChunk.y, 2)) > 1.7)
+                if (chunkArray[i, j] != null)
                 {
-                    disableChunk(transform.GetChild(i));
-                }
-                else
-                {
-                    enableChunk(transform.GetChild(i));
+                    if (Mathf.Sqrt(Mathf.Pow(i - playerX, 2) + Mathf.Pow(j - playerY, 2)) > 1.7f)
+                    {
+                        disableChunk(i, j);
+                    }
+                    else
+                    {
+                        enableChunk(i, j);
+                    }
                 }
             }
         }
     }
 
-    float toChunkValue(float worldvalue)
+/*    void destroyNonEssential(Transform chunkObj)
+    {
+        for (int k=0; k<chunkObj.childCount;k++)
+        {
+            if (chunkObj.GetChild(k).tag=="NonEssential")
+            {
+                Destroy(chunkObj.GetChild(k).gameObject);
+            }
+        }
+        string[] splitted = chunkObj.name.Split(',');
+        // Debug.Log(splitted[0].Substring(7));
+        int chunkx = int.Parse(splitted[0].Substring(7));
+        int chunky = int.Parse(splitted[1]);
+        chunksDrawn[chunkx, chunky] = false;
+        Debug.Log("Destroyed Chunk: "+chunkx+","+chunky);
+
+    }*/
+    /*
+    public GameObject myChunk(Transform targetObj)
+    {
+
+        return chunkArray[toChunkValue(targetObj.position.x), toChunkValue(targetObj.position.y)];
+    }
+
+    int toChunkValue(float worldvalue)
     {
         return (Mathf.FloorToInt(worldvalue / chunkSize) + (gridSize / 2));
     }
 
-    float toWorldValue(float chunkvalue)
+    float toWorldValue(int chunkvalue)
     {
         return ((chunkvalue-(gridSize / 2))*chunkSize);
     }
 
-    void disableChunk(Coord chunkPos)
+    void disableChunk(int x, int y)
     {
-        if (transform.FindChild("Chunk :" + chunkPos.x + "," + chunkPos.y)!=null) {
-            Transform chunkObj = transform.FindChild("Chunk :" + chunkPos.x + "," + chunkPos.y) ;
-            chunkObj.gameObject.SetActive(false);
-        } else
-        {
-            Debug.LogError("Trying to disable non-existant chunk!");
-        }
-    }
-
-    void disableChunk(Transform chunkObj)
-    {
-        //Transform chunkObj = transform.FindChild("Chunk :" + chunk.position.x + "," + chunk.position.y);
-        chunkObj.gameObject.SetActive(false);
-    }
-
-    void enableChunk(Transform chunkObj)
-    {
-        //Transform chunkObj = transform.FindChild("Chunk :" + chunk.position.x + "," + chunk.position.y);
-        chunkObj.gameObject.SetActive(true);
-    }
-
-    void enableChunk(Coord chunkPos)
-    {
-        Transform chunkObj = transform.FindChild("Chunk :" + chunkPos.x + "," + chunkPos.y);
+        GameObject chunkObj = chunkArray[x, y];
         if (chunkObj != null)
         {
-            chunkObj.gameObject.SetActive(true);
+            if (chunksEnabledArray[x, y])
+            {
+                //Debug.Log("Disabled Chunk: " + x + "," + y);
+                for (int i = 0; i < chunkObj.transform.childCount; i++)
+                {
+                    if (chunkObj.transform.GetChild(i).tag == "NonEssential")
+                    {
+                        chunkObj.transform.GetChild(i).GetComponent<debrisBrain>().SaveVeloc();
+                        chunkObj.transform.GetChild(i).GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                        chunkObj.transform.GetChild(i).GetComponent<Collider2D>().enabled = false;
+                        chunkObj.transform.GetChild(i).GetComponent<SpriteRenderer>().enabled = false;
+                        chunkObj.transform.GetChild(i).GetComponent<debrisBrain>().enabled = false;
+                    }
+                    else
+                    {
+                        Debug.Log("Essential Object Not Unloaded");
+                    }
+                }
+                chunksEnabledArray[x, y] = false;
+            }
         }
         else
         {
-            Debug.LogError("Trying to enable non-existant chunk!");
+            Debug.LogError("Trying to disable non-generated chunk: " + x + "," + y + "!");
         }
     }
 
-    void GenerateChunksSurrounding(Coord chunkPos)
+    void enableChunk(int x, int y)
+    {
+        GameObject chunkObj = chunkArray[x, y];
+        if (chunkObj != null)
+        {
+            if (!chunksEnabledArray[x, y])
+            {
+                //Debug.Log("Re-Enabled Chunk: " + x + "," + y);
+                for (int i = 0; i < chunkObj.transform.childCount; i++)
+                {
+                    if (chunkObj.transform.GetChild(i).tag == "NonEssential")
+                    {
+                        chunkObj.transform.GetChild(i).GetComponent<Collider2D>().enabled = true;
+                        chunkObj.transform.GetChild(i).GetComponent<SpriteRenderer>().enabled = true;
+                        chunkObj.transform.GetChild(i).GetComponent<debrisBrain>().enabled = false;
+                        chunkObj.transform.GetChild(i).GetComponent<debrisBrain>().LoadVeloc();
+                    }
+                }
+                //chunkObj.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            Debug.LogError("Trying to enable non-generated chunk: " + x + "," + y + "!");
+        }
+            chunksEnabledArray[x, y] = true;
+    }
+
+    public Transform ChunkAt(Transform target)
+    {
+        if (chunkArray[toChunkValue(target.position.x), toChunkValue(target.position.y)] != null)
+        {
+            return chunkArray[toChunkValue(target.position.x), toChunkValue(target.position.y)].transform;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    void GenerateChunksSurrounding(int x, int y)
     {
         for (int i=0; i<3; i++)
         {
@@ -104,68 +167,104 @@ public class chunkDrawing : MonoBehaviour {
             {
                 if (i!=1||j!=1)
                 {
-                    GenerateChunk(new Coord(chunkPos.x+i-1, chunkPos.y + j - 1));
+                    GenerateChunk(x+i-1,y+j-1);
                 }
             }
         }
     }
 
-    void GenerateChunksNine(Coord chunkPos)
+    void GenerateChunksNine(int x, int y)
     {
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
             {
-                    GenerateChunk(new Coord(chunkPos.x + i - 1, chunkPos.y + j - 1));
+                GenerateChunk(x + i - 1, y + j - 1);
             }
         }
     }
-    
-    void GenerateChunksList(Coord[] chunks)
+
+    void GenerateChunksList(int[] xs, int[] ys)
     {
-        for (int i=0; i<chunks.Length; i++)
+        int xlen = xs.Length;
+        if (xlen != ys.Length)
         {
-            GenerateChunk(chunks[i]);
+            Debug.LogError("Cannot Create Chunk List with Inequal Amount of Y's and X's");
+        } else {
+            for (int i = 0; i < xlen; i++)
+            {
+                GenerateChunk(xs[i],ys[i]);
+            }
         }
     }
 
-    void GenerateMissingNearby(Coord chunkPos)
+    void GenerateMissingNearby(int x, int y)
     {
-       // Coord[] missingList = new Coord[9];
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
             {
-                if (!chunksDrawn[(int)chunkPos.x + i - 1, (int)chunkPos.y + j - 1])
+                if (chunkArray[x + i - 1, y + j - 1]==null)
                 {
-                    GenerateChunk(new Coord(chunkPos.x + i - 1, chunkPos.y + j - 1));
+                    GenerateChunk(x + i - 1,y + j - 1);
                 }
             }
         }
     }
 
-    public Transform GenerateEmpty(Vector3 pos) 
+    void GenerateMissingNearby(GameObject target)
+    {
+        GenerateMissingNearby(toChunkValue(target.transform.position.x), toChunkValue(target.transform.position.y));
+    }
+
+
+    /*public Transform GenerateEmpty(Vector3 pos) 
     {
         GameObject chunk = new GameObject();
+
         chunk.name = "Chunk :" + (Mathf.FloorToInt(pos.x / chunkSize) + (gridSize / 2)) + "," + (Mathf.FloorToInt(pos.y / chunkSize) + (gridSize / 2));
         chunk.transform.parent = transform;
         chunk.tag = "Group";
         //chunk.transform.position = new Vector3(toWorldValue(Mathf.FloorToInt(pos.x / chunkSize) + (gridSize / 2)), toWorldValue(Mathf.FloorToInt(pos.x / chunkSize) + (gridSize / 2)), 0);
         return chunk.transform;
+    }*/
+    /*
+    public Transform GenerateChunk(int x, int y)
+    {
+        if (chunkArray[x,y]==null) {
+            GameObject chunk = new GameObject();
+            GetComponent<asteroidControl>().GenerateRandomField((x - (gridSize / 2)) * chunkSize, (y - (gridSize / 2)) * chunkSize, ((x - (gridSize / 2)) * chunkSize) + chunkSize, ((y - (gridSize / 2)) * chunkSize) + chunkSize, 75,chunk);
+            chunk.name = "Chunk :" + x + "," + y;
+            //Debug.Log("Generated Chunk :" + x + "," + y);
+            chunk.transform.parent = transform;
+            chunk.tag = "Group";
+            chunkArray[x,y] = chunk;
+            return chunk.transform;
+        } else {
+            Debug.LogError("Trying to generate already generated chunk at "+x+","+y+" !");
+            return null;
+        }
     }
 
-    void GenerateChunk(Coord chunkPos)
+    public Transform GenerateChunk(Transform target)
     {
-        if (chunksDrawn[(int)chunkPos.x, (int)chunkPos.y]==false) {
+        int x = toChunkValue(target.position.x);
+        int y = toChunkValue(target.position.y);
+
+        if (chunkArray[x, y] == null)
+        {
             GameObject chunk = new GameObject();
-            GetComponent<asteroidControl>().GenerateRandomField((chunkPos.x - (gridSize / 2)) * chunkSize, (chunkPos.y - (gridSize / 2)) * chunkSize, ((chunkPos.x - (gridSize / 2)) * chunkSize) + chunkSize, ((chunkPos.y - (gridSize / 2)) * chunkSize) + chunkSize, 75,chunk);
-            chunk.name = "Chunk :" + chunkPos.x + "," + chunkPos.y;
+            GetComponent<asteroidControl>().GenerateRandomField((x - (gridSize / 2)) * chunkSize, (y - (gridSize / 2)) * chunkSize, ((x - (gridSize / 2)) * chunkSize) + chunkSize, ((y - (gridSize / 2)) * chunkSize) + chunkSize, 75, chunk);
+            chunk.name = "Chunk :" + x + "," + y;
             chunk.transform.parent = transform;
-            //chunk.transform.position = new Vector3(toWorldValue(chunkPos.x), toWorldValue(chunkPos.y), 0);
             chunk.tag = "Group";
-            chunksDrawn[(int)chunkPos.x, (int)chunkPos.y] = true;
-        } else {
+            chunkArray[x, y] = chunk;
+            return chunk.transform;
+        }
+        else
+        {
             Debug.LogError("Trying to generate already generated chunk!");
+            return null;
         }
     }
 

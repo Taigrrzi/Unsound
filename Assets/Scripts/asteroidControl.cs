@@ -5,12 +5,6 @@ public class asteroidControl : MonoBehaviour {
 
     public string[] asteroidObjects;
     public float[] asteroidRarities;
-    //public int asteroidAmount;
-    //public float maxX;
-    //public float maxY;
-    //public float minX;
-    //public float minY;
-    //GameObject asteroidParent;
 
 
 	// Use this for initialization
@@ -24,12 +18,47 @@ public class asteroidControl : MonoBehaviour {
     {
         for (int i = 0; i < amount; i++)
         {
-            GameObject currentAsteroid = Instantiate(Resources.Load<GameObject>(GenerateRandomAsteroid()));
+            GameObject prefab = Resources.Load<GameObject>(GenerateRandomAsteroid());
+            prefab.GetComponent<debrisBrain>().chunkDrawing = transform;
+            GameObject currentAsteroid = Instantiate(prefab);
             currentAsteroid.transform.parent = par.transform;
             currentAsteroid.transform.position = new Vector3(Random.Range(mmaxX, mminX), Random.Range(mmaxY, mminY), 0);
-            currentAsteroid.GetComponent<Rigidbody2D>().angularVelocity = Random.value * 100;
-            currentAsteroid.GetComponent<Rigidbody2D>().velocity = Vector2.right * ((Random.value * 2) - 1);
+            currentAsteroid.GetComponent<Rigidbody2D>().angularVelocity = Random.value * 300;
+            currentAsteroid.GetComponent<Rigidbody2D>().velocity = Vector2.right *((Random.value * 2) - 1)*(Random.value*5);
         }
+    }
+
+
+    public GameObject[] GenerateRandomCircle(float X,float Y, float radius, int amount, GameObject par)
+    {
+        GameObject[] asteroidArray = new GameObject[amount];
+        for (int i = 0; i < amount; i++)
+        {
+            Vector2 randomPoint = Random.insideUnitCircle * radius;
+            GameObject prefab = Resources.Load<GameObject>(GenerateRandomAsteroid());
+            prefab.GetComponent<debrisBrain>().chunkDrawing = transform;
+            GameObject currentAsteroid = Instantiate(prefab);
+            currentAsteroid.transform.parent = par.transform;
+            currentAsteroid.transform.position = new Vector3(X + randomPoint.x, Y+randomPoint.y, 0);
+            currentAsteroid.GetComponent<Rigidbody2D>().angularVelocity = Random.value * 300;
+            currentAsteroid.GetComponent<Rigidbody2D>().velocity = Vector2.right * ((Random.value * 2) - 1) * (Random.value * 5);
+            asteroidArray[i] = currentAsteroid;
+        }
+        return asteroidArray;
+    }
+
+    public GameObject GenerateRandomAsteroidOnCircle(float X, float Y, float radius, GameObject par)
+    {
+        int angle = Mathf.FloorToInt(Random.value * 360);
+        Vector2 moveVector = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+        GameObject prefab = Resources.Load<GameObject>(GenerateRandomAsteroid());
+        prefab.GetComponent<debrisBrain>().chunkDrawing = transform;
+        GameObject currentAsteroid = Instantiate(prefab);
+        currentAsteroid.transform.parent = par.transform;
+        currentAsteroid.transform.position = new Vector3(X+moveVector.x,Y+moveVector.y, 0);
+        currentAsteroid.GetComponent<Rigidbody2D>().angularVelocity = Random.value * 300;
+        currentAsteroid.GetComponent<Rigidbody2D>().velocity = Vector2.right * ((Random.value * 2) - 1) * (Random.value * 5);
+        return currentAsteroid;
     }
 
     public string GenerateRandomAsteroid()

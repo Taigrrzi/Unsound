@@ -31,7 +31,7 @@ public class cameraFollow : MonoBehaviour
         //transform.position = new Vector3 (target.transform.position.x, target.transform.position.y, Mathf.Lerp(transform.position.z,intendedZoom,0.2f));
         if (Input.GetButton("Look"))
         {
-            Debug.Log(Input.GetAxis("MouseScrollWheel"));
+            //Debug.Log(Input.GetAxis("MouseScrollWheel"));
             mouseScreenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(mouseScreenPosition.x, mouseScreenPosition.y, 0f));
             intendedPosition = new Vector3((target.transform.position.x + mouseWorldPosition.x) / 2, (target.transform.position.y + mouseWorldPosition.y) / 2, -1);

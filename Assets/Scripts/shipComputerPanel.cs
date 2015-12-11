@@ -8,17 +8,29 @@ public class shipComputerPanel : MonoBehaviour
     public GameObject computer;
     public Vector3 myWorldPos;
     public Vector3 myWorldPosPlusHeight;
+    public GameObject taggedDropdown;
+    public GameObject[] computerTaggedObjects;
+    public int maxTagAmount;
+    LineRenderer line1;
+    LineRenderer line2;
 
     void Start()
     {
+        maxTagAmount = computer.GetComponent<shipComputer>().maxTaggedObjects;
+        computerTaggedObjects = computer.GetComponent<shipComputer>().taggedObjects;
         transform.GetChild(0).GetComponent<Text>().text = (computer.GetComponent<shipComputer>().computerName);
+        taggedDropdown = transform.GetChild(5).gameObject;
+        line1 = transform.GetChild(2).GetComponent<LineRenderer>();
+        line2 = transform.GetChild(3).GetComponent<LineRenderer>();
+        for (int i=0;i<maxTagAmount;i++)
+        {
+            
+        }
+        taggedDropdown.GetComponent<Dropdown>().options = new System.Collections.Generic.List<Dropdown.OptionData>( );
     }
 
     void Update()
     {
-        // Vector3 worldPoint = Camera.main.ScreenToWorldPoint(transform.position);
-        LineRenderer line1 = transform.GetChild(2).GetComponent<LineRenderer>();
-        LineRenderer line2 = transform.GetChild(3).GetComponent<LineRenderer>();
 
         myWorldPos = Camera.main.ScreenToWorldPoint(transform.position);
         myWorldPos = new Vector3(myWorldPos.x, myWorldPos.y, 0f);
@@ -38,5 +50,12 @@ public class shipComputerPanel : MonoBehaviour
     public void TaggingButton()
     {
         computer.GetComponent<shipComputer>().tagging = true;
+    }
+
+    public void OldTagClicked()
+    {
+        //computer.GetComponent<shipComputer>().powered = !computer.GetComponent<shipComputer>().powered;
+        //poweredToggle.isOn = rocket.GetComponent<RocketBrain>().powered;
+        //Debug.Log("Toggled!");
     }
 }

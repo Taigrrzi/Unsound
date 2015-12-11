@@ -4,25 +4,51 @@ using System.Collections;
 public class debrisBrain : MonoBehaviour {
 
     public Transform chunkDrawing;
-    int gridSize;
-    int chunkSize;
+    Vector2 loadedVelocity;
+    float loadedAngularVelocity;
+    //chunkDrawing chunkDrawingScript;
 
     // Use this for initialization
     void Start () {
-        chunkDrawing = GameObject.Find("Chunk Based Drawing").transform;
-        gridSize = chunkDrawing.GetComponent<chunkDrawing>().gridSize;
-        chunkSize = chunkDrawing.GetComponent<chunkDrawing>().chunkSize;
-        GetComponent<Rigidbody2D>().angularVelocity = Random.value*100;
-        GetComponent<Rigidbody2D>().velocity = Vector2.right*((Random.value*2)-1) ;
+        //chunkDrawingScript = chunkDrawing.GetComponent<chunkDrawing>();
+        //SaveVeloc();
     }
 
-    void Update ()
+   // void Update ()
+    //{
+
+        //transform.parent = chunkDrawingScript.ChunkAt(transform);
+        //    if (transform.parent==null)
+        //{
+        //    transform.parent = chunkDrawingScript.GenerateChunk(transform);
+        //}
+    //}
+
+    /*public void SaveVeloc() {
+        loadedVelocity = GetComponent<Rigidbody2D>().velocity;
+        loadedAngularVelocity = GetComponent<Rigidbody2D>().angularVelocity;
+    }*/
+
+    /*public void LoadVeloc()
     {
-        
-        transform.parent = chunkDrawing.transform.FindChild("Chunk :" + (Mathf.FloorToInt(transform.position.x / chunkSize) + (gridSize / 2)) + "," + (Mathf.FloorToInt(transform.position.y / chunkSize) + (gridSize / 2)));
-        if (transform.parent==null)
-        {
-            transform.parent = chunkDrawing.GetComponent<chunkDrawing>().GenerateEmpty(transform.position);
-        }
+        GetComponent<Rigidbody2D>().velocity = loadedVelocity;
+        GetComponent<Rigidbody2D>().angularVelocity = loadedAngularVelocity;
+    }*/
+    /*
+    void OnDisable()
+    {
+        //Debug.Log("Disabled");
+        loadedVelocity = GetComponent<Rigidbody2D>().velocity;
+        loadedAngularVelocity = GetComponent<Rigidbody2D>().angularVelocity;
     }
+
+    void OnEnable()
+    {
+        GetComponent<Rigidbody2D>().velocity = loadedVelocity;
+        //if (loadedVelocity==Vector2.zero)
+        //{
+         //   Debug.Log("Reloaded Not Moving");
+        //}
+        GetComponent<Rigidbody2D>().angularVelocity = loadedAngularVelocity;
+    }*/
 }

@@ -12,6 +12,7 @@ public class explosion : MonoBehaviour {
         timer++;
           if (timer>duration)
         {
+            GetComponent<ParticleSystem>().startLifetime = GetComponent<CircleCollider2D>().radius/5;
             Destroy(gameObject);
         }
     }
