@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 public class shipComputer : MonoBehaviour {
 
     public GameObject[] attachedComponents;
-    public int maxBindings = 8;
+    public int maxBindings =9;
     public KeyCode[] keyBindingCodes;
     public string[] keyBindingNames;
     public bool[] keyBindingStates;
@@ -19,8 +19,11 @@ public class shipComputer : MonoBehaviour {
     public int TaggedObjectsUsed;
     public GameObject[] taggedObjects;
     public Console console;
+    public int[] ammoAmounts; //1 = garbage
 
     void Start () {
+        ammoAmounts = new int[2];
+        ammoAmounts[1] = 100;
         console.AddFunctionality(new ConsoleFunctionality("ping", gameObject, "Ping:: No Parameters. Sends out a short radio ping.",true));
         console.AddFunctionality(new ConsoleFunctionality("freeze", gameObject, "Freeze:: No Parameters. Stops ship movement.",true));
         console.AddFunctionality(new ConsoleFunctionality("noclip", gameObject, "Noclip:: Toggles Ship Colliders",false));
@@ -40,13 +43,19 @@ public class shipComputer : MonoBehaviour {
         keyBindingNames[3] = "TurnRight";
         keyBindingNames[4] = "StrafeLeft";
         keyBindingNames[5] = "StrafeRight";
+        keyBindingNames[6] = "ShootGun";
+        keyBindingNames[7] = "ClockWiseGun";
+        keyBindingNames[8] = "AntiClockWiseGun";
         keyBindingCodes[0] = KeyCode.W;
         keyBindingCodes[1] = KeyCode.S;
         keyBindingCodes[2] = KeyCode.A;
         keyBindingCodes[3] = KeyCode.D;
         keyBindingCodes[4] = KeyCode.Q;
         keyBindingCodes[5] = KeyCode.E;
-        usedKeyBindings = 6;
+        keyBindingCodes[6] = KeyCode.Space;
+        keyBindingCodes[7] = KeyCode.LeftArrow;
+        keyBindingCodes[8] = KeyCode.RightArrow;
+        usedKeyBindings = 9;
         attachedComponents = new GameObject[transform.childCount];
         for (int i = 0; i<transform.childCount; i++)
         {
