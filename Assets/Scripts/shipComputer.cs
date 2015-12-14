@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 public class shipComputer : MonoBehaviour {
 
     public GameObject[] attachedComponents;
-    public int maxBindings =9;
+    public int maxBindings =10;
     public KeyCode[] keyBindingCodes;
     public string[] keyBindingNames;
     public bool[] keyBindingStates;
@@ -46,6 +46,7 @@ public class shipComputer : MonoBehaviour {
         keyBindingNames[6] = "ShootGun";
         keyBindingNames[7] = "ClockWiseGun";
         keyBindingNames[8] = "AntiClockWiseGun";
+        keyBindingNames[9] = "Boost";
         keyBindingCodes[0] = KeyCode.W;
         keyBindingCodes[1] = KeyCode.S;
         keyBindingCodes[2] = KeyCode.A;
@@ -55,7 +56,8 @@ public class shipComputer : MonoBehaviour {
         keyBindingCodes[6] = KeyCode.Space;
         keyBindingCodes[7] = KeyCode.LeftArrow;
         keyBindingCodes[8] = KeyCode.RightArrow;
-        usedKeyBindings = 9;
+        keyBindingCodes[9] = KeyCode.LeftShift;
+        usedKeyBindings = 10;
         attachedComponents = new GameObject[transform.childCount];
         for (int i = 0; i<transform.childCount; i++)
         {

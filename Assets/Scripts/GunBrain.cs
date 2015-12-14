@@ -95,7 +95,7 @@ public class GunBrain : MonoBehaviour {
                 }
             }
         }
-        else if (shipcomputer.keyBindingStates[clockKey])
+        if (shipcomputer.keyBindingStates[clockKey])
         {
             gunAngle+=5;
         }
@@ -103,7 +103,7 @@ public class GunBrain : MonoBehaviour {
         {
             gunAngle-=5;
         }
-        gunAngle = Mathf.Clamp(gunAngle,-70,70);
+        gunAngle = Mathf.Clamp(gunAngle,-60,60);
         barrel.transform.localEulerAngles = new Vector3(0, 0, gunAngle);
     }
 
