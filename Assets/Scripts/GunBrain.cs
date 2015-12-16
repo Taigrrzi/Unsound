@@ -20,6 +20,7 @@ public class GunBrain : MonoBehaviour {
     public float bulletVelocity;
     public GameObject barrel;
     public int shotDelay;
+    public float recoil;
     int shotTimer=0;
     bool canShoot;
     public bool overheated;
@@ -117,6 +118,7 @@ public class GunBrain : MonoBehaviour {
         Physics2D.IgnoreCollision(bullet.GetComponent<Collider2D>(),barrel.GetComponent<Collider2D>());
         Physics2D.IgnoreCollision(bullet.GetComponent<Collider2D>(),GetComponent<Collider2D>());
         bullet.GetComponent<Rigidbody2D>().AddForce(barrel.transform.right * bulletVelocity,ForceMode2D.Impulse);
+        GetComponentInParent<Rigidbody2D>().AddForce(barrel.transform.right *(-recoil),ForceMode2D.Impulse);
         canShoot = false;
         shotTimer = 0;
         currentHeat += shotHeat;

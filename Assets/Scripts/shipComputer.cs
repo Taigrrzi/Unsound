@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.EventSystems;
-public class shipComputer : MonoBehaviour {
 
+public class shipComputer : MonoBehaviour {
     public GameObject[] attachedComponents;
     public int maxBindings =10;
     public KeyCode[] keyBindingCodes;
@@ -19,6 +20,7 @@ public class shipComputer : MonoBehaviour {
     public int TaggedObjectsUsed;
     public GameObject[] taggedObjects;
     public Console console;
+    public GameObject panel = null;
     public int[] ammoAmounts; //1 = garbage
 
     void Start () {
@@ -95,11 +97,13 @@ public class shipComputer : MonoBehaviour {
             if (GetComponent<Collider2D>().OverlapPoint(mousePosition) && !panelOut)
             {
                 //Debug.Log(name + "was Clicked");
-                GameObject panel = Instantiate(Resources.Load<GameObject>("ShipComputerPanel"));
+                panel = Instantiate(Resources.Load<GameObject>("ShipComputerPanel"));
                 panel.GetComponent<shipComputerPanel>().computer = gameObject;
                 panelOut = true;
                 panel.transform.position = Camera.main.WorldToScreenPoint(transform.position);
                 panel.transform.SetParent(GameObject.Find("Canvas").transform);
+                panel.transform.FindChild("CloseButton").GetComponent<Button>().onClick.AddListener(delegate { ClosePanel(); });
+                panel.SetActive(true);
             }
 
 
@@ -140,7 +144,6 @@ public class shipComputer : MonoBehaviour {
 
     public void HandleFunction()
     {
-        string[] consoleInput = GetComponent<ConsoleReciever>().consoleInput;
         string funcString = GetComponent<ConsoleReciever>().functionName;
         switch (funcString)
         {
@@ -177,6 +180,12 @@ public class shipComputer : MonoBehaviour {
         {
             col.enabled = !(col.enabled);
         }
+    }
+
+    public void ClosePanel()
+    {
+        panelOut = false;
+        Destroy(panel);
     }
 
 }

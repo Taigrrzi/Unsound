@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class spaceStationBrain : MonoBehaviour {
@@ -11,6 +12,7 @@ public class spaceStationBrain : MonoBehaviour {
     public int size; //0 = small, 1= medium, 2= large, 3=huge
     public int crewSize;
     public Person leader;
+    public GameObject panel;
 
 
     // Use this for initialization
@@ -46,14 +48,21 @@ public class spaceStationBrain : MonoBehaviour {
 
             if (GetComponent<Collider2D>().OverlapPoint(mousePosition) && !basePanelOut)
             {
-                GameObject panel = Instantiate(Resources.Load<GameObject>("StationPanel"));
+                panel = Instantiate(Resources.Load<GameObject>("StationPanel"));
                 panel.GetComponent<StationPanel>().station = gameObject;
                 basePanelOut = true;
                 panel.transform.position = Camera.main.WorldToScreenPoint(transform.GetChild(0).position);
                 panel.transform.SetParent(GameObject.Find("Canvas").transform);
+                panel.transform.FindChild("CloseButton").GetComponent<Button>().onClick.AddListener(delegate { ClosePanel(); });
+                panel.SetActive(true);
             }
         }
     }
 
-    
+    public void ClosePanel()
+    {
+        basePanelOut = false;
+        Destroy(panel);
+    }
+
 }
