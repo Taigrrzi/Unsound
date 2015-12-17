@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class RocketBrain : MonoBehaviour {
 
     public bool active;
     public float thrustPower;
+    public int burstDuration;
+    public float burstPower;
     public float myRotation;
     public bool forceOn;
     public bool powered;
@@ -18,6 +21,7 @@ public class RocketBrain : MonoBehaviour {
     public bool pressed;
     public shipComputer shipcomputer;
     public int usedKeys = 0;
+    GameObject panel = null;
 
     void Start()
     {
@@ -93,16 +97,21 @@ public class RocketBrain : MonoBehaviour {
             if (GetComponent<Collider2D>().OverlapPoint(mousePosition)&&!panelOut)
             {
                 //Debug.Log(name + "was Clicked");
-                GameObject panel = Instantiate(Resources.Load<GameObject>("RocketPanel"));
+                panel = Instantiate(Resources.Load<GameObject>("RocketPanel"));
                 panel.GetComponent<RocketPanel>().rocket = gameObject;
                 panelOut = true;
                 panel.transform.position = Camera.main.WorldToScreenPoint(transform.GetChild(0).position);
                 panel.transform.SetParent(GameObject.Find("Canvas").transform);
+                panel.transform.FindChild("CloseButton").GetComponent<Button>().onClick.AddListener(delegate { ClosePanel(); });
+                panel.SetActive(true);
             }
-
-
         }
+    }
 
+    public void ClosePanel()
+    {
+        panelOut = false;
+        Destroy(panel);
     }
     /*
     void OnMouseDown()

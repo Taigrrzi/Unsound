@@ -15,13 +15,17 @@ public class Console : MonoBehaviour
     public GameObject playerShip ;
     public GameObject canvas;
 
-    void Start()
+    void Awake()
     {
         Hide();
         pastFunctions = new List<string>();
         consoleStrings = new List<string>();
         functionalities = new List<ConsoleFunctionality>();
         selected = false;
+    }
+
+    void Start()
+    {
         AddFunctionality(new ConsoleFunctionality("close",gameObject,"Close:: No Parameters. Closes the console window.",true));
         AddFunctionality(new ConsoleFunctionality("help", gameObject, "Help:: String functionName. Very funny, shows the details of a console function.",true));
         AddFunctionality(new ConsoleFunctionality("list", gameObject, "List:: Shows a list of all public functions useable in the console",true));
