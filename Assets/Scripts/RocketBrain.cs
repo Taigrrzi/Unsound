@@ -6,6 +6,8 @@ public class RocketBrain : MonoBehaviour {
 
     public bool active;
     public float thrustPower;
+    public int burstDuration;
+    public float burstPower;
     public float myRotation;
     public bool forceOn;
     public bool powered;
