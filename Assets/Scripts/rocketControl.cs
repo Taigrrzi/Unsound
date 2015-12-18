@@ -15,9 +15,9 @@ public class rocketControl : MonoBehaviour {
     public bool burstRocket;
 
     public float currentThrust;
-    public bool bursting;
-    public float xComponent;
-    public float yComponent;
+    float xComponent;
+    float yComponent;
+    public ParticleSystem particles;
 
     public float targetThrustFraction=1;
     public float targetThrust;
@@ -25,47 +25,66 @@ public class rocketControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        xComponent = Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.z);
+        yComponent = Mathf.Cos(Mathf.Deg2Rad * transform.rotation.eulerAngles.z);
         targetThrust = baseThrust * targetThrustFraction;
         transform.parent.GetComponent<Rigidbody2D>().mass += mass;
+        particles = transform.GetChild(0).GetComponent<ParticleSystem>();
     }
 	
 	// Update is called once per frame
 	void Update () {
-	    if (active)
+        targetThrust = baseThrust * targetThrustFraction;
+        if (active)
         {
-            if (burstRocket)
+            if (currentThrust<targetThrust)
             {
-                if (bursting)
-                {
-                    if (currentThrust<burstThrust)
-                    {
-
-                    }
-                }
+                currentThrust += gainRate;
+            } else if (Mathf.Abs(currentThrust-targetThrust)<gainRate)
+            {
+                currentThrust = targetThrust;
+            } else
+            {
+                currentThrust -= (currentThrust - targetThrust) / 10;
             }
+        } else
+        {
+            currentThrust -= haltRate;
         }
 
         if (currentThrust>0)
         {
-            xComponent = Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.z);
-            yComponent = Mathf.Cos(Mathf.Deg2Rad * transform.rotation.eulerAngles.z);
             transform.parent.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(currentThrust * (-xComponent), currentThrust * yComponent), ForceMode2D.Force);
             transform.parent.GetComponent<Rigidbody2D>().AddTorque(((currentThrust * xComponent * transform.localPosition.y) + (currentThrust * yComponent * transform.localPosition.x)));
         } else
         {
             currentThrust = 0;
         }
-	}
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            Debug.Log("ROCKET ON");
+            Activate();
+        } else if (Input.GetKeyUp(KeyCode.W))
+        {
+            Deactivate();
+        }
+        particles.startSpeed = currentThrust / 2;
+    }
 
-    public void activate()
+    public void Activate()
     {
         if (currentThrust ==0 )
         {
-            xComponent = Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.z);
-            yComponent = Mathf.Cos(Mathf.Deg2Rad * transform.rotation.eulerAngles.z);
-            transform.parent.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(burstThrust * (-xComponent), burstThrust * yComponent), ForceMode2D.Force);
-            transform.parent.GetComponent<Rigidbody2D>().AddTorque(((currentThrust * burstThrust * transform.localPosition.y) + (burstThrust * yComponent * transform.localPosition.x)));
+            //currentThrust = burstThrust;
+            transform.parent.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(burstThrust * (-xComponent), burstThrust * yComponent), ForceMode2D.Impulse);
+            transform.parent.GetComponent<Rigidbody2D>().AddTorque(((currentThrust * burstThrust * transform.localPosition.y) + (burstThrust * yComponent * transform.localPosition.x)),ForceMode2D.Impulse);
         }
-        active = true; 
+        active = true;
+        particles.startSpeed = burstThrust / 2;
+    }
+
+    public void Deactivate()
+    {
+        active = false;
     }
 }
