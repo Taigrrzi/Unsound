@@ -62,7 +62,7 @@ public class rocketControl : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            Debug.Log("ROCKET ON");
+            //Debug.Log("ROCKET ON");
             Activate();
         } else if (Input.GetKeyUp(KeyCode.W))
         {
@@ -75,9 +75,9 @@ public class rocketControl : MonoBehaviour {
     {
         if (currentThrust ==0 )
         {
-            //currentThrust = burstThrust;
-            transform.parent.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(burstThrust * (-xComponent), burstThrust * yComponent), ForceMode2D.Impulse);
-            transform.parent.GetComponent<Rigidbody2D>().AddTorque(((currentThrust * burstThrust * transform.localPosition.y) + (burstThrust * yComponent * transform.localPosition.x)),ForceMode2D.Impulse);
+            currentThrust = burstThrust;
+            //transform.parent.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(burstThrust * (-xComponent), burstThrust * yComponent), ForceMode2D.Impulse);
+            //transform.parent.GetComponent<Rigidbody2D>().AddTorque(((currentThrust * burstThrust * transform.localPosition.y) + (burstThrust * yComponent * transform.localPosition.x)),ForceMode2D.Impulse);
         }
         active = true;
         particles.startSpeed = burstThrust / 2;
