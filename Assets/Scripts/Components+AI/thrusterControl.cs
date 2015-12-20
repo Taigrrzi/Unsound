@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿    using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -41,22 +41,22 @@ public class thrusterControl : MonoBehaviour {
             targetThrust = baseThrust * targetThrustFraction;
             if (active)
             {
-                if (currentThrust < targetThrust)
+                if (currentThrust / Time.timeScale < targetThrust / Time.timeScale)
                 {
-                    currentThrust += gainRate;
+                    currentThrust += gainRate*Time.deltaTime;
                 }
-                else if (Mathf.Abs(currentThrust - targetThrust) < gainRate)
+                else if (Mathf.Abs(currentThrust - targetThrust) < gainRate*Time.deltaTime)
                 {
                     currentThrust = targetThrust;
                 }
                 else
                 {
-                    currentThrust -= (currentThrust - targetThrust) / 10;
+                    currentThrust -= (currentThrust - targetThrust) / (10*Time.deltaTime);
                 }
             }
             else
             {
-                currentThrust -= haltRate;
+                currentThrust -= haltRate*Time.deltaTime;
             }
             foreach (KeyCode kcode in boundKeys) {
                 if (Input.GetKeyDown(kcode))
@@ -74,6 +74,17 @@ public class thrusterControl : MonoBehaviour {
         {
             currentThrust -= haltRate;
         }
+        if (currentThrust < 0)
+        {
+            currentThrust = 0;
+        }
+        particles.startSpeed = currentThrust / 10;
+        particles.emissionRate = currentThrust * 10;
+        particles.startSize = Mathf.Sqrt(currentThrust) / 30;
+    }
+
+    void FixedUpdate()
+    {
         if (currentThrust > 0)
         {
             if (transform.parent != null)
@@ -87,12 +98,6 @@ public class thrusterControl : MonoBehaviour {
                 GetComponent<Rigidbody2D>().AddTorque(((currentThrust * xComponent * transform.localPosition.y) + (currentThrust * yComponent * transform.localPosition.x)));
             }
         }
-        else
-        {
-            currentThrust = 0;
-        }
-        particles.startSpeed = currentThrust / 10;
-        particles.emissionRate = currentThrust * 10; 
     }
 
     public void Activate()

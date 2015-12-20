@@ -41,9 +41,9 @@ public class GunBrain : MonoBehaviour {
     {
         if (ableToShoot)
         {
-            if (shotTimer < shotDelay/Time.timeScale)
+            if (shotTimer < shotDelay/Time.deltaTime)
             {
-                shotTimer+=Time.deltaTime;
+                shotTimer+=1;
             }
             else
             {
@@ -63,9 +63,9 @@ public class GunBrain : MonoBehaviour {
         }
         if (overheated)
         {
-            overheatTimer+=Time.deltaTime;
+            overheatTimer+=1;
             ableToShoot = false;
-            if (overheatTimer>overheatDuration*Time.timeScale)
+            if (overheatTimer>overheatDuration/Time.deltaTime)
             {
                 overheated = false;
                 ableToShoot = true;

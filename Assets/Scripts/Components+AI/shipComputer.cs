@@ -14,6 +14,7 @@ public class shipComputer : MonoBehaviour {
     public bool consolePanelOut;
     public int maxTaggedObjects;
     public int TaggedObjectsUsed;
+    public float rotTimer;
     public GameObject[] taggedObjects;
     public Console console;
     public GameObject panel = null;
@@ -91,11 +92,20 @@ public class shipComputer : MonoBehaviour {
                 taggedObjects[maxTaggedObjects] = null;
             }
         }
-        if (Mathf.Abs(GetComponent<Rigidbody2D>().angularVelocity)<killRotation && Mathf.Abs(GetComponent<Rigidbody2D>().angularVelocity)<=rotationLastTurn)
+    }
+
+    void FixedUpdate()
+    {
+        rotTimer += Time.deltaTime;
+        if (rotTimer > 0.2  )
+        {
+            rotationLastTurn = Mathf.Abs(GetComponent<Rigidbody2D>().angularVelocity);
+            rotTimer = 0;
+        }
+        if (Mathf.Abs(GetComponent<Rigidbody2D>().angularVelocity) < killRotation && Mathf.Abs(GetComponent<Rigidbody2D>().angularVelocity) < rotationLastTurn)
         {
             GetComponent<Rigidbody2D>().angularVelocity = 0;
         }
-        rotationLastTurn = Mathf.Abs(GetComponent<Rigidbody2D>().angularVelocity);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
