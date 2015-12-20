@@ -9,6 +9,7 @@ public class shipComputer : MonoBehaviour {
     public string computerName;
     public int baseHullArmor;
     public bool tagging;
+    public float killRotation;
     public int currentHullArmor;
     public bool consolePanelOut;
     public int maxTaggedObjects;
@@ -17,8 +18,10 @@ public class shipComputer : MonoBehaviour {
     public Console console;
     public GameObject panel = null;
     public int[] ammoAmounts; //1 = garbage
+    public float rotationLastTurn;
 
     void Start () {
+        rotationLastTurn = 0;
         ammoAmounts = new int[2];
         ammoAmounts[1] = 100;
         console.AddFunctionality(new ConsoleFunctionality("ping", gameObject, "Ping:: No Parameters. Sends out a short radio ping.",true));
@@ -88,7 +91,11 @@ public class shipComputer : MonoBehaviour {
                 taggedObjects[maxTaggedObjects] = null;
             }
         }
-
+        if (Mathf.Abs(GetComponent<Rigidbody2D>().angularVelocity)<killRotation && Mathf.Abs(GetComponent<Rigidbody2D>().angularVelocity)<=rotationLastTurn)
+        {
+            GetComponent<Rigidbody2D>().angularVelocity = 0;
+        }
+        rotationLastTurn = Mathf.Abs(GetComponent<Rigidbody2D>().angularVelocity);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
