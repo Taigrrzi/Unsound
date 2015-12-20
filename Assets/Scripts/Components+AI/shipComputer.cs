@@ -5,12 +5,7 @@ using UnityEngine.EventSystems;
 
 public class shipComputer : MonoBehaviour {
     public GameObject[] attachedComponents;
-    public int maxBindings =10;
-    public KeyCode[] keyBindingCodes;
-    public string[] keyBindingNames;
-    public bool[] keyBindingStates;
     public bool panelOut;
-    public int usedKeyBindings;
     public string computerName;
     public int baseHullArmor;
     public bool tagging;
@@ -35,31 +30,6 @@ public class shipComputer : MonoBehaviour {
         computerName = "ZHI Computer";
         panelOut = false;
         consolePanelOut = false;
-        usedKeyBindings = 0;
-        keyBindingNames = new string[maxBindings];
-        keyBindingCodes = new KeyCode[maxBindings];
-        keyBindingStates = new bool[maxBindings];
-        keyBindingNames[0] = "Forward";
-        keyBindingNames[1] = "Backward";
-        keyBindingNames[2] = "TurnLeft";
-        keyBindingNames[3] = "TurnRight";
-        keyBindingNames[4] = "StrafeLeft";
-        keyBindingNames[5] = "StrafeRight";
-        keyBindingNames[6] = "ShootGun";
-        keyBindingNames[7] = "ClockWiseGun";
-        keyBindingNames[8] = "AntiClockWiseGun";
-        keyBindingNames[9] = "Boost";
-        keyBindingCodes[0] = KeyCode.W;
-        keyBindingCodes[1] = KeyCode.S;
-        keyBindingCodes[2] = KeyCode.A;
-        keyBindingCodes[3] = KeyCode.D;
-        keyBindingCodes[4] = KeyCode.Q;
-        keyBindingCodes[5] = KeyCode.E;
-        keyBindingCodes[6] = KeyCode.Space;
-        keyBindingCodes[7] = KeyCode.LeftArrow;
-        keyBindingCodes[8] = KeyCode.RightArrow;
-        keyBindingCodes[9] = KeyCode.LeftShift;
-        usedKeyBindings = 10;
         attachedComponents = new GameObject[transform.childCount];
         for (int i = 0; i<transform.childCount; i++)
         {
@@ -85,10 +55,6 @@ public class shipComputer : MonoBehaviour {
         if (GetComponent<ConsoleReciever>().incomingFunction)
         {
             HandleFunction();
-        }
-        for (int i=0;i<usedKeyBindings;i++)
-        {
-            keyBindingStates[i] = Input.GetKey(keyBindingCodes[i]);
         }
         if (Input.GetMouseButtonDown(0))
         {

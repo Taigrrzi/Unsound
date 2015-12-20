@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class RocketBrain : MonoBehaviour {
-
+    /*
     public bool active;
     public float thrustPower;
     public int burstDuration;
@@ -151,7 +151,7 @@ public class RocketBrain : MonoBehaviour {
             setNextBoundKey("turnLeft");
         }
     }
-    */
+    
     void setNextBoundKey(int Key)
     {
         for (int i=0;i<boundKeys.Length;i++)
@@ -160,5 +160,5 @@ public class RocketBrain : MonoBehaviour {
                 boundKeys[i] = Key;
             }
         }
-    }
+    }*/
 }
