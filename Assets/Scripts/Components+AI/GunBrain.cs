@@ -4,28 +4,27 @@ using System.Collections;
 public class GunBrain : MonoBehaviour {
 
     public bool powered;
-    public float mass;
     public shipComputer shipcomputer;
-    public int shootKey ;
-    public int clockKey;
-    public int antKey;
+    public KeyCode shootKey ;
+    public KeyCode clockKey;
+    public KeyCode antKey;
     public int shotConsumption;
     public int ammoType;
     public string bulletResource;
     public int shotHeat;
     public float heatDecay;
     public float currentHeat;
-    public int overheatDuration;
+    public float overheatDuration;
     public int gunAngle;
     public float bulletVelocity;
     public GameObject barrel;
-    public int shotDelay;
+    public float shotDelay;
     public float recoil;
-    int shotTimer=0;
+    float shotTimer=0;
     bool canShoot;
     public bool overheated;
     public bool ableToShoot;
-    int overheatTimer = 0;
+    float overheatTimer = 0;
 
     // Use this for initialization
     void Start () {
@@ -35,7 +34,6 @@ public class GunBrain : MonoBehaviour {
         currentHeat = 0;
         barrel = transform.GetChild(0).gameObject;
         powered = true;
-        transform.parent.GetComponent<Rigidbody2D>().mass += mass;
     }
 	
 	// Update is called once per frame
@@ -43,9 +41,9 @@ public class GunBrain : MonoBehaviour {
     {
         if (ableToShoot)
         {
-            if (shotTimer < shotDelay)
+            if (shotTimer < shotDelay/Time.timeScale)
             {
-                shotTimer++;
+                shotTimer+=Time.deltaTime;
             }
             else
             {
@@ -57,7 +55,7 @@ public class GunBrain : MonoBehaviour {
             overheated = true;
         } else if (currentHeat>0)
             {
-                currentHeat -= heatDecay;
+                currentHeat -= heatDecay*Time.deltaTime;
                 if (currentHeat<0)
                 {
                     currentHeat = 0;
@@ -65,9 +63,9 @@ public class GunBrain : MonoBehaviour {
         }
         if (overheated)
         {
-            overheatTimer++;
+            overheatTimer+=Time.deltaTime;
             ableToShoot = false;
-            if (overheatTimer>overheatDuration)
+            if (overheatTimer>overheatDuration*Time.timeScale)
             {
                 overheated = false;
                 ableToShoot = true;
@@ -78,7 +76,7 @@ public class GunBrain : MonoBehaviour {
     }
 
 	void FixedUpdate () {
-        if (shipcomputer.keyBindingStates[shootKey])
+        if (Input.GetKey(shootKey))
         {
             if (powered)
             {
@@ -96,11 +94,11 @@ public class GunBrain : MonoBehaviour {
                 }
             }
         }
-        if (shipcomputer.keyBindingStates[clockKey])
+        if (Input.GetKey(clockKey))
         {
             gunAngle+=5;
         }
-        else if (shipcomputer.keyBindingStates[antKey])
+        else if (Input.GetKey(antKey))
         {
             gunAngle-=5;
         }

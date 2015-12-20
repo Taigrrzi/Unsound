@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class RocketBrain : MonoBehaviour {
-
+    /*
     public bool active;
     public float thrustPower;
     public int burstDuration;
@@ -87,7 +87,7 @@ public class RocketBrain : MonoBehaviour {
         if (active)
         {
             transform.parent.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(thrustPower * (-xComponent), thrustPower * yComponent), ForceMode2D.Force);
-            //transform.parent.GetComponent<Rigidbody2D>().AddForceAtPosition(new Vector2(thrustPower * (xComponent), thrustPower * yComponent), transform.position);
+            //transform.parent.GetComponent<Rigidbody2D>().AddForceAtPosition(new Vector2(thrustPower * (-xComponent), thrustPower * yComponent), transform.GetChild(0).position);
             transform.parent.GetComponent<Rigidbody2D>().AddTorque(((thrustPower*xComponent*transform.localPosition.y) + (thrustPower * yComponent * transform.localPosition.x)));
         }
         if (Input.GetMouseButtonDown(0))
@@ -151,7 +151,7 @@ public class RocketBrain : MonoBehaviour {
             setNextBoundKey("turnLeft");
         }
     }
-    */
+    
     void setNextBoundKey(int Key)
     {
         for (int i=0;i<boundKeys.Length;i++)
@@ -160,5 +160,5 @@ public class RocketBrain : MonoBehaviour {
                 boundKeys[i] = Key;
             }
         }
-    }
+    }*/
 }

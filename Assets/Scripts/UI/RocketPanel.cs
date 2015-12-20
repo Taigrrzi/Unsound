@@ -15,12 +15,12 @@ public class RocketPanel : MonoBehaviour
     {
         poweredToggle = transform.GetChild(1).GetComponent<Toggle>();
         forceOnToggle = transform.GetChild(2).GetComponent<Toggle>();
-        forceOnToggle.isOn = rocket.GetComponent<RocketBrain>().forceOn;
+        //BBB forceOnToggle.isOn = rocket.GetComponent<RocketBrain>().forceOn;
         //Debug.Log(rocket.GetComponent<RocketBrain>().forceOn);
         //Debug.Log(forceOnToggle.isOn);
-        poweredToggle.isOn = rocket.GetComponent<RocketBrain>().powered;
-        transform.GetChild(0).GetComponent<Text>().text = (rocket.GetComponent<RocketBrain>().rocketName);
-        transform.GetChild(6).GetComponent<Text>().text = "Power: " + (rocket.GetComponent<RocketBrain>().thrustPower * 100);
+        //BBB poweredToggle.isOn = rocket.GetComponent<RocketBrain>().powered;
+        //BBB transform.GetChild(0).GetComponent<Text>().text = (rocket.GetComponent<RocketBrain>().rocketName);
+        //BBB transform.GetChild(6).GetComponent<Text>().text = "Power: " + (rocket.GetComponent<RocketBrain>().thrustPower * 100);
     }
 
     void Update()
@@ -48,15 +48,15 @@ public class RocketPanel : MonoBehaviour
 
     public void PoweredToggled ()
     {
-        rocket.GetComponent<RocketBrain>().powered = !rocket.GetComponent<RocketBrain>().powered;
-        poweredToggle.isOn = rocket.GetComponent<RocketBrain>().powered;
+        //BBB rocket.GetComponent<RocketBrain>().powered = !rocket.GetComponent<RocketBrain>().powered;
+        //BBB poweredToggle.isOn = rocket.GetComponent<RocketBrain>().powered;
         //Debug.Log("Toggled!");
     }
 
     public void ForceOnToggled()
     {
-        rocket.GetComponent<RocketBrain>().forceOn = !rocket.GetComponent<RocketBrain>().forceOn;
-        forceOnToggle.isOn = rocket.GetComponent<RocketBrain>().forceOn;
+        //BBB rocket.GetComponent<RocketBrain>().forceOn = !rocket.GetComponent<RocketBrain>().forceOn;
+        //BBB forceOnToggle.isOn = rocket.GetComponent<RocketBrain>().forceOn;
         //Debug.Log("Toggled!");
     }
 }
