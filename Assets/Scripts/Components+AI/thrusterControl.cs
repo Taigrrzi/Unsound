@@ -91,7 +91,8 @@ public class thrusterControl : MonoBehaviour {
         {
             currentThrust = 0;
         }
-        particles.startSpeed = currentThrust / 2; 
+        particles.startSpeed = currentThrust / 10;
+        particles.emissionRate = currentThrust * 10; 
     }
 
     public void Activate()
@@ -103,7 +104,8 @@ public class thrusterControl : MonoBehaviour {
             //transform.parent.GetComponent<Rigidbody2D>().AddTorque(((currentThrust * burstThrust * transform.localPosition.y) + (burstThrust * yComponent * transform.localPosition.x)),ForceMode2D.Impulse);
         }
         active = true;
-        particles.startSpeed = burstThrust / 2;
+        particles.startSpeed = burstThrust / 10;
+        particles.emissionRate = burstThrust * 10;
     }
 
     public void Deactivate()
