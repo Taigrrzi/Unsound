@@ -92,7 +92,8 @@ public class thrusterControl : MonoBehaviour {
             currentThrust = 0;
         }
         particles.startSpeed = currentThrust / 10;
-        particles.emissionRate = currentThrust * 10; 
+        particles.emissionRate = currentThrust * 10;
+        particles.startSize = Mathf.Sqrt(currentThrust) / 30; 
     }
 
     public void Activate()
