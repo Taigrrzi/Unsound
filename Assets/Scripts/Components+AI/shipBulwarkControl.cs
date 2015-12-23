@@ -67,11 +67,14 @@ public class shipBulwarkControl : MonoBehaviour
         Destroy(GetComponent<Rigidbody2D>());
     }
 
-    void OnCollisionEntered2D(Collision2D other)
+    void OnCollisionEnter2D(Collision2D other)
     {
         if (other.relativeVelocity.magnitude >= detachVelocity&&detachVelocity!=-1)
         {
-            Detach();
+            if (attached)
+            {
+                Detach();
+            }
         }
     }
 }

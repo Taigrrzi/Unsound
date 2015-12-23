@@ -95,7 +95,7 @@ public class thrusterControl : MonoBehaviour {
             else
             {
                 GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(currentThrust * (-xComponent), currentThrust * yComponent), ForceMode2D.Force);
-                GetComponent<Rigidbody2D>().AddTorque(((currentThrust * xComponent * transform.localPosition.y) + (currentThrust * yComponent * transform.localPosition.x)));
+                //GetComponent<Rigidbody2D>().AddTorque(((currentThrust * xComponent * transform.localPosition.y) + (currentThrust * yComponent * transform.localPosition.x)));
             }
         }
     }

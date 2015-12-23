@@ -30,13 +30,24 @@ public class shipComponentControl : MonoBehaviour {
 
     public void Detach()
     {
-        GetComponentInParent<shipComputer>().GetComponent<Rigidbody2D>().mass -= mass;
-        attached = false;
-        transform.parent = null;
-        rbd = gameObject.AddComponent<Rigidbody2D>();
-        rbd.mass = mass;
-        rbd.gravityScale = 0;
-        rbd.angularDrag = 0;
+        if (attached)
+        {
+            GetComponentInParent<shipComputer>().GetComponent<Rigidbody2D>().mass -= mass;
+            attached = false;
+            transform.parent = null;
+            rbd = gameObject.AddComponent<Rigidbody2D>();
+            if (bulwark!=null)
+            {
+                bulwark.GetComponent<shipBulwarkControl>().attachedComponents.Remove(gameObject);
+            }
+            rbd.mass = mass;
+            rbd.gravityScale = 0;
+            rbd.angularDrag = 0;
+            powered = false;
+        } else
+        {
+            Debug.LogError("Trying to detach when detached: "+transform.position.x);
+        }
     }
 
     public void Attach(GameObject ship)
@@ -48,11 +59,14 @@ public class shipComponentControl : MonoBehaviour {
         Destroy(GetComponent<Rigidbody2D>());
     }
 
-    void OnCollisionEntered2D(Collision2D other)
+    void OnCollisionEnter2D(Collision2D other)
     {
         if (other.relativeVelocity.magnitude>=detachVelocity)
         {
-            Detach();
+            if (attached)
+            {
+                Detach();
+            }
         }
     }
 }
