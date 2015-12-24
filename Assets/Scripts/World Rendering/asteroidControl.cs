@@ -19,7 +19,6 @@ public class asteroidControl : MonoBehaviour {
         for (int i = 0; i < amount; i++)
         {
             GameObject prefab = Resources.Load<GameObject>(GenerateRandomAsteroid());
-            prefab.GetComponent<debrisBrain>().chunkDrawing = transform;
             GameObject currentAsteroid = Instantiate(prefab);
             currentAsteroid.transform.parent = par.transform;
             currentAsteroid.transform.position = new Vector3(Random.Range(mmaxX, mminX), Random.Range(mmaxY, mminY), 0);
@@ -36,7 +35,6 @@ public class asteroidControl : MonoBehaviour {
         {
             Vector2 randomPoint = Random.insideUnitCircle * radius;
             GameObject prefab = Resources.Load<GameObject>(GenerateRandomAsteroid());
-            prefab.GetComponent<debrisBrain>().chunkDrawing = transform;
             GameObject currentAsteroid = Instantiate(prefab);
             currentAsteroid.transform.parent = par.transform;
             currentAsteroid.transform.position = new Vector3(X + randomPoint.x, Y+randomPoint.y, 0);
@@ -52,7 +50,6 @@ public class asteroidControl : MonoBehaviour {
         int angle = Mathf.FloorToInt(Random.value * 360);
         Vector2 moveVector = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
         GameObject prefab = Resources.Load<GameObject>(GenerateRandomAsteroid());
-        prefab.GetComponent<debrisBrain>().chunkDrawing = transform;
         GameObject currentAsteroid = Instantiate(prefab);
         currentAsteroid.transform.parent = par.transform;
         currentAsteroid.transform.position = new Vector3(X+moveVector.x,Y+moveVector.y, 0);

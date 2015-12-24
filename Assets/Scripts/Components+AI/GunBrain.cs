@@ -5,6 +5,7 @@ public class GunBrain : MonoBehaviour {
 
     public bool powered;
     public shipComputer shipcomputer;
+    GameObject distanceDraw;
     public KeyCode shootKey ;
     public KeyCode clockKey;
     public KeyCode antKey;
@@ -28,6 +29,7 @@ public class GunBrain : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        distanceDraw = GameObject.Find("DistanceDrawing");
         ableToShoot = true;
         shipcomputer = transform.parent.GetComponent<shipComputer>();
         overheated = false;
@@ -117,6 +119,7 @@ public class GunBrain : MonoBehaviour {
         bullet.GetComponent<Rigidbody2D>().rotation = barrel.transform.rotation.z;
         //Debug.Log(barrel.transform.rotation.eulerAngles);
         bullet.GetComponent<Rigidbody2D>().velocity = GetComponentInParent<Rigidbody2D>().velocity;
+        distanceDraw.GetComponent<DistanceDrawing>().tempCircle.Add(bullet);
         Physics2D.IgnoreCollision(bullet.GetComponent<Collider2D>(),barrel.GetComponent<Collider2D>());
         Physics2D.IgnoreCollision(bullet.GetComponent<Collider2D>(),GetComponent<Collider2D>());
         bullet.GetComponent<Rigidbody2D>().AddForce(barrel.transform.right * bulletVelocity,ForceMode2D.Impulse);

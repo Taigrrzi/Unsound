@@ -8,11 +8,17 @@ public class mineBrain : MonoBehaviour {
     public float instantDetSpeed;
     public float explosionDelay;
     public float sensitivity;
+    GameObject distanceDraw;
     float timer;
     public bool tripped;
     public bool huge;
     public bool inverse;
 	// Use this for initialization
+
+    void Awake()
+    {
+        distanceDraw = GameObject.Find("DistanceDrawing");
+    }
 
     void Update ()
     {
@@ -46,6 +52,8 @@ public class mineBrain : MonoBehaviour {
             bang.GetComponent<explosion>().power = explosionPower;
             bang.GetComponent<explosion>().duration = 60;
             bang.transform.position = transform.position;
+            distanceDraw.GetComponent<DistanceDrawing>().tempCircle.Add(bang);
+            bang.transform.parent = distanceDraw.transform;
         }
         else if (inverse)
         {
@@ -54,6 +62,8 @@ public class mineBrain : MonoBehaviour {
             bang.GetComponent<implosion>().power = explosionPower;
             bang.GetComponent<implosion>().duration = 180;
             bang.transform.position = transform.position;
+            distanceDraw.GetComponent<DistanceDrawing>().tempCircle.Add(bang);
+            bang.transform.parent = distanceDraw.transform;
         }
         {
             GameObject bang = Instantiate(Resources.Load<GameObject>("Explosion"));
@@ -61,6 +71,8 @@ public class mineBrain : MonoBehaviour {
             bang.GetComponent<explosion>().power = explosionPower;
             bang.transform.position = transform.position;
             bang.GetComponent<explosion>().duration = 3;
+            distanceDraw.GetComponent<DistanceDrawing>().tempCircle.Add(bang);
+            bang.transform.parent = distanceDraw.transform;
         }
         Destroy(gameObject);
     }

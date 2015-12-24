@@ -15,7 +15,7 @@ public class drawFPS : MonoBehaviour {
     }
 
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         pastFps[59] = Mathf.FloorToInt(1f / Time.deltaTime);
         int averageFps = 0;
         for (int i = 1; i < 60; i++)
