@@ -39,15 +39,19 @@ public class GunBrain : MonoBehaviour {
 	// Update is called once per frame
     void Update()
     {
-        if (ableToShoot)
+        powered = GetComponent<shipComponentControl>().powered;
+        if (powered)
         {
-            if (shotTimer < shotDelay/Time.deltaTime)
+            if (ableToShoot)
             {
-                shotTimer+=1;
-            }
-            else
-            {
-                canShoot = true;
+                if (shotTimer < shotDelay / Time.deltaTime)
+                {
+                    shotTimer += 1;
+                }
+                else
+                {
+                    canShoot = true;
+                }
             }
         }
         if (currentHeat>100)

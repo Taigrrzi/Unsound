@@ -32,7 +32,7 @@ public class shipComponentControl : MonoBehaviour {
     {
         if (attached)
         {
-            GetComponentInParent<shipComputer>().GetComponent<Rigidbody2D>().mass -= mass;
+            GetComponentInParent<Rigidbody2D>().mass -= mass;
             attached = false;
             transform.parent = null;
             rbd = gameObject.AddComponent<Rigidbody2D>();
@@ -61,7 +61,7 @@ public class shipComponentControl : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.relativeVelocity.magnitude>=detachVelocity)
+        if (other.relativeVelocity.magnitude >= detachVelocity && detachVelocity != -1)
         {
             if (attached)
             {

@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class taggable : MonoBehaviour {
-    public shipComputer computer ;
+   /* public shipComputer computer ;
     public bool tagged = false;
 	// Update is called once per frame
     void Start()
@@ -19,7 +19,7 @@ public class taggable : MonoBehaviour {
                 {
                     if (!tagged)
                     {
-                        computer.addNewTag(gameObject);
+                        computer.ta(gameObject);
                         tagged = true;
                     } else
                     {
@@ -33,6 +33,6 @@ public class taggable : MonoBehaviour {
 
     void OnDestroy ()
     {
-        computer.TaggedObjectsUsed--;
-    }
+        computer.taggedObjects.Remove(gameObject);
+    }*/
 }

@@ -10,7 +10,7 @@ public class implosion : MonoBehaviour
 
     void Update()
     {
-        timer++;
+        timer+=(Time.deltaTime*60);
         if (timer > duration)
         {
             GetComponent<ParticleSystem>().startLifetime = GetComponent<CircleCollider2D>().radius / 5;

@@ -2,9 +2,11 @@
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class shipComputer : MonoBehaviour {
-    public GameObject[] attachedComponents;
+    public List<GameObject> attachedComponents;
+    public List<GameObject> taggedObjects;
     public bool panelOut;
     public string computerName;
     public int baseHullArmor;
@@ -12,10 +14,7 @@ public class shipComputer : MonoBehaviour {
     public float killRotation;
     public int currentHullArmor;
     public bool consolePanelOut;
-    public int maxTaggedObjects;
-    public int TaggedObjectsUsed;
     public float rotTimer;
-    public GameObject[] taggedObjects;
     public Console console;
     public GameObject panel = null;
     public int[] ammoAmounts; //1 = garbage
@@ -29,17 +28,10 @@ public class shipComputer : MonoBehaviour {
         console.AddFunctionality(new ConsoleFunctionality("freeze", gameObject, "Freeze:: No Parameters. Stops ship movement.",true));
         console.AddFunctionality(new ConsoleFunctionality("noclip", gameObject, "Noclip:: Toggles Ship Colliders",false));
 
-        taggedObjects = new GameObject[maxTaggedObjects];
         currentHullArmor = baseHullArmor;
         computerName = "ZHI Computer";
         panelOut = false;
         consolePanelOut = false;
-        attachedComponents = new GameObject[transform.childCount];
-        for (int i = 0; i<transform.childCount; i++)
-        {
-            attachedComponents[i] = transform.GetChild(i).gameObject;
-        }
-
 	}
 	
 	// Update is called once per frame
@@ -78,20 +70,6 @@ public class shipComputer : MonoBehaviour {
 
 
         }
-        for (int i = 0; i<TaggedObjectsUsed;i++)
-        {
-            if (taggedObjects[i]!=null)
-            {
-
-            }else
-            {
-                for (int j = i; j < TaggedObjectsUsed-1; j++)
-                {
-                    taggedObjects[j] = taggedObjects[j + 1];
-                }
-                taggedObjects[maxTaggedObjects] = null;
-            }
-        }
     }
 
     void FixedUpdate()
@@ -111,18 +89,6 @@ public class shipComputer : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D collision)
     {
         currentHullArmor -= Mathf.RoundToInt(collision.relativeVelocity.magnitude*10);
-    }
-
-    public void addNewTag(GameObject taggedObj)
-    {
-        if (TaggedObjectsUsed<maxTaggedObjects)
-        {
-            taggedObjects[TaggedObjectsUsed] = taggedObj;
-            TaggedObjectsUsed++;
-        } else
-        {
-            Debug.LogError("Called Object Tag function and computer has no more space!");
-        }
     }
 
     public void HandleFunction()

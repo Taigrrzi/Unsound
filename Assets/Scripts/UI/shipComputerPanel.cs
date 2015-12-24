@@ -16,8 +16,8 @@ public class shipComputerPanel : MonoBehaviour
 
     void Start()
     {
-        maxTagAmount = computer.GetComponent<shipComputer>().maxTaggedObjects;
-        computerTaggedObjects = computer.GetComponent<shipComputer>().taggedObjects;
+        //maxTagAmount = computer.GetComponent<shipComputer>().maxTaggedObjects;
+        //computerTaggedObjects = computer.GetComponent<shipComputer>().taggedObjects;
         transform.GetChild(0).GetComponent<Text>().text = (computer.GetComponent<shipComputer>().computerName);
         taggedDropdown = transform.GetChild(5).gameObject;
         line1 = transform.GetChild(2).GetComponent<LineRenderer>();
