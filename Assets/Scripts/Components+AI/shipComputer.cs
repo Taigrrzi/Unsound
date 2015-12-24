@@ -17,6 +17,7 @@ public class shipComputer : MonoBehaviour {
     public GameObject[] taggedObjects;
     public Console console;
     public GameObject panel = null;
+    public GameObject dPanel;
     public int[] ammoAmounts; //1 = garbage
     public float rotationLastTurn;
 
