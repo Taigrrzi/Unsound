@@ -6,8 +6,10 @@ using System.Collections.Generic;
 
 public class shipComputer : MonoBehaviour {
     public List<GameObject> attachedComponents;
+    public Dictionary<GameObject,GameObject> shipBuildingZones;
     public List<GameObject> taggedObjects;
     public bool panelOut;
+    public Transform shipBuildingParent;
     public string computerName;
     public int baseHullArmor;
     public bool tagging;
@@ -21,6 +23,7 @@ public class shipComputer : MonoBehaviour {
     public float rotationLastTurn;
 
     void Start () {
+        shipBuildingParent = transform.FindChild("ShipBuildingParent");
         rotationLastTurn = 0;
         ammoAmounts = new int[2];
         ammoAmounts[1] = 100;
