@@ -98,6 +98,16 @@ public class thrusterControl : MonoBehaviour {
                 //GetComponent<Rigidbody2D>().AddTorque(((currentThrust * xComponent * transform.localPosition.y) + (currentThrust * yComponent * transform.localPosition.x)));
             }
         }
+<<<<<<< HEAD
+=======
+        else
+        {
+            currentThrust = 0;
+        }
+        particles.startSpeed = currentThrust / 10;
+        particles.emissionRate = currentThrust * 10;
+        particles.startSize = Mathf.Sqrt(currentThrust) / 30; 
+>>>>>>> refs/remotes/origin/character-dialogue
     }
 
     public void Activate()

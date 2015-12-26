@@ -19,6 +19,7 @@ public class shipComputer : MonoBehaviour {
     public float rotTimer;
     public Console console;
     public GameObject panel = null;
+    public GameObject dPanel;
     public int[] ammoAmounts; //1 = garbage
     public float rotationLastTurn;
 
